@@ -7,7 +7,7 @@ export const metadata = {
   description: "Manage your account and website settings",
 };
 
-const page = async () => {
+const Page = async () => {
   const session = await getAuthSession();
   if (!session?.user) {
     return redirect("sign-in");
@@ -24,4 +24,4 @@ const page = async () => {
   );
 };
 
-export default page;
+export default Page;
