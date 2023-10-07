@@ -74,6 +74,7 @@ export async function PATCH(req: Request) {
         const payload: CachedPost = {
           id: postId,
           title: post.title,
+          authorId: post.author.id,
           authorUsername: post.author.username ?? "",
           createdAt: post.createdAt,
           currentVote: voteType,
@@ -104,6 +105,7 @@ export async function PATCH(req: Request) {
         id: postId,
         title: post.title,
         authorUsername: post.author.username ?? "",
+        authorId: post.author.id,
         createdAt: post.createdAt,
         currentVote: voteType,
         content: JSON.stringify(post.content),

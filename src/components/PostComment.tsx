@@ -16,6 +16,7 @@ import { UserAvatar } from "./UserAvatar";
 import { Button } from "./ui/Button";
 import { Label } from "./ui/Label";
 import { Textarea } from "./ui/Textarea";
+import DeleteCom from "./DeleteCom";
 
 type ExtendComment = Comment & {
   votes: CommentVote[];
@@ -77,7 +78,7 @@ const PostComment: FC<PostCommentProps> = ({
 
   return (
     <div ref={commentRef} className="flex flex-col">
-      <div className="flex items-center">
+      <div className="flex items-center relative">
         <UserAvatar
           user={{
             name: comment.author.name || null,
@@ -85,13 +86,18 @@ const PostComment: FC<PostCommentProps> = ({
           }}
           className="h-6 w-6"
         />
-        <div className="ml-2 flex items-center gap-x-2">
+        <div className="ml-2 flex items-center gap-x-2 ">
           <p className="text-sm font-medium text-gray-900">
             u/${comment.author.username}
           </p>
           <p className="max-h-40 truncate text-xs text-zinc-500">
             {formatTimeToNow(new Date(comment.createdAt))}
           </p>
+          <DeleteCom
+            postId={comment.postId}
+            authorId={comment.authorId}
+            commentId={comment.id}
+          />
         </div>
       </div>
       <p className="text-sm text-zinc-900 mt-2">{comment.text}</p>

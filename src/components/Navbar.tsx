@@ -4,6 +4,7 @@ import { Icons } from "./Icons";
 import SearchBar from "./SearchBar";
 import UserAccountNav from "./UserAccountNav";
 import { buttonVariants } from "./ui/Button";
+import { cn } from "@/lib/utils";
 
 const Navbar = async () => {
   const session = await getAuthSession();
@@ -20,7 +21,10 @@ const Navbar = async () => {
         {session ? (
           <UserAccountNav user={session?.user} />
         ) : (
-          <Link href="/sign-in" className={buttonVariants()}>
+          <Link
+            href="/sign-in"
+            className={cn(buttonVariants(), "whitespace-nowrap h-[2.699rem]")}
+          >
             Sign In
           </Link>
         )}

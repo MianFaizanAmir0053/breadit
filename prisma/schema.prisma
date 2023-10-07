@@ -51,8 +51,8 @@ model User {
   createdSubreddits Subreddit[]    @relation("CreatedBy")
   accounts          Account[]
   sessions          Session[]
-  posts             Post[]
-  comments          Comment[]
+  posts             Post[] 
+  comments          Comment[] 
   commentVotes      CommentVote[]
   Vote              Vote[]
   subscription      subscription[]
@@ -66,16 +66,16 @@ model Subreddit {
   posts     Post[]
 
   creatorId   String?
-  creator     User?          @relation("CreatedBy", fields: [creatorId], references: [id])
+  creator     User?          @relation("CreatedBy", fields: [creatorId], references: [id], onDelete: Cascade)
   subscribers subscription[]
 
   @@index([name])
 }
 
 model subscription {
-  user        User      @relation(fields: [userId], references: [id])
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      String
-  subreddit   Subreddit @relation(fields: [subredditId], references: [id])
+  subreddit   Subreddit @relation(fields: [subredditId], references: [id], onDelete: Cascade)
   subredditId String
 
   @@id([userId, subredditId])
@@ -87,12 +87,13 @@ model Post {
   content     Json?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
-  author      User      @relation(fields: [authorId], references: [id])
+  author      User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId    String
-  subreddit   Subreddit @relation(fields: [subredditId], references: [id])
+  subreddit   Subreddit @relation(fields: [subredditId], references: [id], onDelete: Cascade)
   subredditId String
   comments    Comment[]
   votes        Vote[]
+
 
   // @@index([authorId])
   // @@index([subredditId])
@@ -102,9 +103,9 @@ model Comment {
   id        String   @id @default(cuid())
   text      String
   createdAt DateTime @default(now())
-  author    User     @relation(fields: [authorId], references: [id])
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId  String
-  post      Post     @relation(fields: [postId], references: [id])
+  post      Post     @relation(fields: [postId], references: [id] ,onDelete: Cascade)
   postId    String
 
   replyToId String?
@@ -125,9 +126,9 @@ enum VoteType {
 }
 
 model Vote {
-  user   User     @relation(fields: [userId], references: [id])
+  user   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
-  post   Post     @relation(fields: [postId], references: [id])
+  post   Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId String
   type   VoteType
   // @@index([userId])
@@ -137,9 +138,9 @@ model Vote {
 }
 
 model CommentVote {
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
-  comment   Comment  @relation(fields: [commentId], references: [id])
+  comment   Comment  @relation(fields: [commentId], references: [id], onDelete: Cascade)
   commentId String
   type      VoteType
   // @@index([userId])

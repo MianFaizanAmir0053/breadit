@@ -1,7 +1,9 @@
 import MiniCreatePost from "@/components/MiniCreatePost";
 import PostFeed from "@/components/PostFeed";
+import { Button } from "@/components/ui/Button";
 import { getAuthSession } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { MAX_NUMBER_POSTS_TO_GET } from "@/lib/postsToFetch";
 import { notFound } from "next/navigation";
 
 interface PageProps {
@@ -26,7 +28,7 @@ const Page = async ({ params }: PageProps) => {
           comments: true,
           votes: true,
         },
-        take: 5,
+        take: MAX_NUMBER_POSTS_TO_GET,
         orderBy: { createdAt: "desc" },
       },
     },
@@ -36,9 +38,11 @@ const Page = async ({ params }: PageProps) => {
 
   return (
     <>
-      <h1 className="font-bold text-3xl md:text-4xl h-1/4">
-        r/{subreddit.name}
-      </h1>
+      <div className="grid grid-cols-2">
+        <div className="font-bold text-3xl md:text-4xl  h-1/4">
+          <h1> r/{subreddit.name}</h1>
+        </div>
+      </div>
       <MiniCreatePost session={session} />
       <PostFeed initialPosts={subreddit.posts} subredditName={subreddit.name} />
     </>
