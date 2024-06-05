@@ -9,14 +9,12 @@ export async function DELETE(req: Request) {
     const { postId, authorId } = deletePostValidator.parse(
       Object.fromEntries(searchParams)
     );
-    console.log(postId, authorId);
 
     const post = await db.post.findUnique({
       where: {
         id: postId,
       },
     });
-    console.log(post);
 
     if (!post) return new Response("Post not found", { status: 404 });
     if (post.authorId !== authorId)

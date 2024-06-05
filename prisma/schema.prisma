@@ -6,7 +6,7 @@ generator client {
 }
 
 datasource db {
-  provider     = "postgresql"
+  provider     = "mysql"
   url          = env("DATABASE_URL")
   relationMode = "prisma"
 }
@@ -51,8 +51,8 @@ model User {
   createdSubreddits Subreddit[]    @relation("CreatedBy")
   accounts          Account[]
   sessions          Session[]
-  posts             Post[] 
-  comments          Comment[] 
+  posts             Post[]
+  comments          Comment[]
   commentVotes      CommentVote[]
   Vote              Vote[]
   subscription      subscription[]
@@ -70,6 +70,7 @@ model Subreddit {
   subscribers subscription[]
 
   @@index([name])
+  @@index([creatorId])
 }
 
 model subscription {
@@ -79,6 +80,7 @@ model subscription {
   subredditId String
 
   @@id([userId, subredditId])
+  @@index([subredditId])
 }
 
 model Post {
@@ -92,11 +94,10 @@ model Post {
   subreddit   Subreddit @relation(fields: [subredditId], references: [id], onDelete: Cascade)
   subredditId String
   comments    Comment[]
-  votes        Vote[]
+  votes       Vote[]
 
-
-  // @@index([authorId])
-  // @@index([subredditId])
+  @@index([authorId])
+  @@index([subredditId])
 }
 
 model Comment {
@@ -105,7 +106,7 @@ model Comment {
   createdAt DateTime @default(now())
   author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId  String
-  post      Post     @relation(fields: [postId], references: [id] ,onDelete: Cascade)
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId    String
 
   replyToId String?
@@ -115,9 +116,9 @@ model Comment {
   votes     CommentVote[]
   commentId String?
 
-  // @@index([authorId])
-  // @@index([postId])
-  // @@index([replyToId])
+  @@index([authorId])
+  @@index([postId])
+  @@index([replyToId])
 }
 
 enum VoteType {
@@ -131,10 +132,10 @@ model Vote {
   post   Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId String
   type   VoteType
-  // @@index([userId])
-  // @@index([postId])
 
   @@id([userId, postId])
+  @@index([userId])
+  @@index([postId])
 }
 
 model CommentVote {
@@ -143,8 +144,8 @@ model CommentVote {
   comment   Comment  @relation(fields: [commentId], references: [id], onDelete: Cascade)
   commentId String
   type      VoteType
-  // @@index([userId])
-  // @@index([commentId])
 
   @@id([userId, commentId])
+  @@index([userId])
+  @@index([commentId])
 }
